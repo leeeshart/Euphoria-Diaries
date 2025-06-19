@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fiction – Euphoria Diaries</title>
-
   <style>
     :root {
       --bg: #ffffff;
@@ -14,7 +13,6 @@
       --sky: #ffffff;
       --chime-glow: #f9c7ff;
     }
-
     [data-theme="dark"] {
       --bg: #121212;
       --text: #ffffff;
@@ -23,13 +21,11 @@
       --sky: #0b1d41;
       --chime-glow: #9be0ff;
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background: var(--sky);
@@ -38,7 +34,6 @@
       padding-top: 60px;
       overflow-x: hidden;
     }
-
     nav {
       position: fixed;
       top: 0;
@@ -50,30 +45,24 @@
       padding: 1rem 2rem;
       z-index: 1000;
     }
-
     .logo {
       font-weight: bold;
       font-size: 1.2rem;
     }
-
     .nav-links {
       display: flex;
       list-style: none;
       gap: 1.2rem;
     }
-
     .nav-links a {
       text-decoration: none;
       color: var(--text);
       font-weight: 500;
     }
-
     section {
       padding: 4rem 2rem;
       text-align: center;
     }
-
-    /* 🎐 Chime */
     .chime {
       position: fixed;
       top: 90px;
@@ -82,18 +71,14 @@
       z-index: 50;
       animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
     }
-
     @keyframes float {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
     }
-
     @keyframes glow {
       0%, 100% { text-shadow: 0 0 10px var(--chime-glow); opacity: 0.8; }
       50% { text-shadow: 0 0 20px var(--chime-glow); opacity: 1; }
     }
-
-    /* 🌸 Petals */
     .petals {
       position: fixed;
       inset: 0;
@@ -101,7 +86,6 @@
       pointer-events: none;
       overflow: hidden;
     }
-
     .petal {
       position: absolute;
       width: 12px;
@@ -111,66 +95,92 @@
       border-radius: 50%;
       animation: fall 10s linear infinite;
     }
-
     @keyframes fall {
       0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
-
-    /* ✍️ Writing Area */
     #fiction-write {
       max-width: 800px;
       margin: auto;
       padding: 2rem;
     }
-
-    textarea {
+    #noteTitle, #noteContent {
       width: 100%;
-      height: 300px;
       padding: 1rem;
+      margin-bottom: 1rem;
       font-size: 1rem;
       border: 2px solid #ffcce0;
-      border-radius: 10px;
+      border-radius: 8px;
       background: var(--card);
       color: var(--text);
+    }
+    #noteContent {
+      height: 200px;
       resize: vertical;
     }
-
-    .save-status {
-      font-size: 0.9rem;
-      color: #888;
-      margin-top: 0.5rem;
+    #saveNote {
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background: #ffa8c2;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+    #saveNote:hover {
+      background: #ff85a6;
+    }
+    .note-card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .note-card h4 {
+      margin-bottom: 0.5rem;
+    }
+    .note-card button {
+      margin-right: 1rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      background: #c0e6ff;
+    }
+    .delete-btn {
+      background: #ffc2c2;
     }
   </style>
 </head>
 <body>
-
-  <!-- 🎐 Chime -->
   <div class="chime">🎐</div>
-
-  <!-- 🌸 Petals -->
   <div class="petals" id="petals"></div>
-
-  <!-- 🔗 Navbar -->
   <nav>
     <div class="logo">Euphoria Diaries</div>
     <ul class="nav-links">
       <li><a href="index.html">🏠 Home</a></li>
-
+      <li><a href="fiction.html">📖 Fiction</a></li>
+      <li><a href="mythology.html">🌌 Mythology</a></li>
       <li><a href="#" id="theme-toggle">🌙</a></li>
     </ul>
   </nav>
 
-  <!-- ✍️ Writing Section -->
   <section id="fiction-write">
     <h2>📖 Your Fiction Diary</h2>
-    <textarea id="fictionNotes" placeholder="Start writing your story here..."></textarea>
-    <p class="save-status">Saved automatically ✅</p>
+    <input type="text" id="noteTitle" placeholder="Note title (e.g., Chapter 1)" />
+    <textarea id="noteContent" placeholder="Write your fiction here..."></textarea>
+    <button id="saveNote">💾 Save Note</button>
+    <hr style="margin: 2rem 0;" />
+    <h3>Your Saved Notes</h3>
+    <div id="notesList"></div>
   </section>
 
-  <!-- ✅ JavaScript -->
   <script>
-    // Theme toggle
     const toggle = document.getElementById("theme-toggle");
     toggle.addEventListener("click", () => {
       const html = document.documentElement;
@@ -179,7 +189,6 @@
       toggle.textContent = isDark ? "🌙" : "☀️";
     });
 
-    // Petal animation
     const petalsContainer = document.getElementById("petals");
     for (let i = 0; i < 25; i++) {
       const petal = document.createElement("div");
@@ -190,15 +199,56 @@
       petalsContainer.appendChild(petal);
     }
 
-    // Auto-save notes
-    const textarea = document.getElementById('fictionNotes');
-    const status = document.querySelector('.save-status');
+    window.addEventListener("load", loadNotes);
+    const saveBtn = document.getElementById("saveNote");
+    const titleInput = document.getElementById("noteTitle");
+    const contentInput = document.getElementById("noteContent");
+    const notesList = document.getElementById("notesList");
 
-    textarea.value = localStorage.getItem('fictionNotes') || '';
-    textarea.addEventListener('input', () => {
-      localStorage.setItem('fictionNotes', textarea.value);
-      status.textContent = "Saved automatically ✅";
-    });
+    function loadNotes() {
+      const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+      notesList.innerHTML = "";
+      notes.forEach((note, index) => {
+        const noteDiv = document.createElement("div");
+        noteDiv.classList.add("note-card");
+        noteDiv.innerHTML = `
+          <h4>${note.title}</h4>
+          <p>${note.content}</p>
+          <button class="edit-btn" onclick="editNote(${index})">✏️ Edit</button>
+          <button class="delete-btn" onclick="deleteNote(${index})">🗑 Delete</button>
+        `;
+        notesList.appendChild(noteDiv);
+      });
+    }
+
+    function saveNote() {
+      const title = titleInput.value.trim();
+      const content = contentInput.value.trim();
+      if (!title || !content) return alert("Title and content required!");
+      const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+      notes.push({ title, content });
+      localStorage.setItem("fictionNotes", JSON.stringify(notes));
+      titleInput.value = "";
+      contentInput.value = "";
+      loadNotes();
+    }
+
+    function editNote(index) {
+      const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+      const note = notes[index];
+      titleInput.value = note.title;
+      contentInput.value = note.content;
+      deleteNote(index);
+    }
+
+    function deleteNote(index) {
+      const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+      notes.splice(index, 1);
+      localStorage.setItem("fictionNotes", JSON.stringify(notes));
+      loadNotes();
+    }
+
+    saveBtn.addEventListener("click", saveNote);
   </script>
 </body>
 </html>
