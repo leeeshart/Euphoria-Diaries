@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Euphoria Diaries</title>
+  <style>
+    :root {
+      
+      --text: #222;
+      --nav: #f0f0f0;
+      --card: #f9f9f9;
+      --sky: #a0d8f0;
+      --chime-glow: #f9c7ff;
+    }
+
+    [data-theme="dark"] {
+      
+      --text: #ffffff;
+      --nav: #1e1e1e;
+      --card: #2c2c2c;
+      --sky: #0b1d41;
+      --chime-glow: #9be0ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background: var(--sky);
+      color: var(--text);
+      transition: all 0.3s ease;
+      padding-top: 60px;
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--nav);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    /* Category Grid */
+    .category-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+     background: var(--card);
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: bold;
+      font-size: 1.1rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    position: relative;
+    }
+
+    .card:hover {
+        background: #ffe6f0;
+        box-shadow: 0 10px 15px rba(255,183,197,0.3);
+        transform: translateY(-4px) scale(1.03);
+        cursor: pointer;
+    }
+    .card::after {
+        content: "🌸";
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        font-size: 1.5rem;
+        opacity: 0;
+        transform: scale(0.5) rotate(0deg);
+        transition: transform 0.6s ease, opacity 0.4s ease;
+    }
+    .card:hover::after {
+        opacity: 1;
+        transform: scale(1.1) rotate(360deg);
+    }
+
+    /* 🎐 Glowing Chime */
+    .chime {
+      position: fixed;
+      top: 90px;
+      right: 30px;
+      font-size: 2rem;
+      z-index: 50;
+      animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 10px var(--chime-glow); opacity: 0.8; }
+      50% { text-shadow: 0 0 20px var(--chime-glow); opacity: 1; }
+    }
+
+    
+
+    /* 🌸 Petals */
+    .petals {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      opacity: 0.6;
+      border-radius: 50%;
+      animation: fall 10s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      .chime { font-size: 1.6rem; right: 20px; }
+      .cat { width: 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader"><p>Loading Euphoria...</p></div>
+
+  <!-- 🎐 Chime -->
+  <div class="chime">🎐</div>
+
+  <!-- 🌸 Petals -->
+  <div class="petals" id="petals"></div>
+
+
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">Euphoria Diaries</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button id="theme-toggle">🌙</button>
+  </nav>
+
+  <!-- Sections -->
+  <section id="home">
+    <h1>Welcome to Euphoria Diaries</h1>
+    <p>Your world of thoughts, fiction, and research.</p>
+  </section>
+
+  <section id="categories">
+    <h2>Categories</h2>
+    <div class="category-grid">
+      <a herf="fiction.html" class="card">Fiction</a>
+      <a herf="non-fiction.html"class="card">Non-Fiction</a>
+      <a herf="experience.html"class="card">Experience</a>
+      <a herf="journal.html"class="card">Journal</a>
+      <a herf="poetry.html"class="card">Poetry</a>
+      <a herf="others.html"class="card">Other</a>
+
+    </div>
+  </section>
+
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>This is a digital reflection of everything I write — from imaginary worlds to real thoughts and deep research.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Let's Connect</h2>
+    <p>Reach out for collaborations or conversations!</p>
+    <p>Email- leeshamogha0@gmail.com</p>
+    <p>GitHub- leeeshart</p>
+  </section>
+
+  <script>
+    // Loader
+    window.addEventListener("load", () => {
+      document.getElementById("loader").style.display = "none";
+    });
+
+    // Theme Toggle
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+      const html = document.documentElement;
+      const isDark = html.dataset.theme === "dark";
+      html.dataset.theme = isDark ? "light" : "dark";
+      toggle.textContent = isDark ? "🌙" : "☀️";
+    });
+
+    // Petal Generator
+    const petalsContainer = document.getElementById("petals");
+    for (let i = 0; i < 25; i++) {
+      const petal = document.createElement("div");
+      petal.classList.add("petal");
+      petal.style.left = `${Math.random() * 100}%`;
+      petal.style.animationDuration = `${6 + Math.random() * 5}s`;
+      petal.style.opacity = Math.random();
+      petalsContainer.appendChild(petal);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fiction – Euphoria Diaries</title>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #222;
+      --nav: #f0f0f0;
+      --card: #f9f9f9;
+      --sky: #ffffff;
+      --chime-glow: #f9c7ff;
+    }
+
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #ffffff;
+      --nav: #1e1e1e;
+      --card: #2c2c2c;
+      --sky: #0b1d41;
+      --chime-glow: #9be0ff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--sky);
+      color: var(--text);
+      transition: all 0.3s ease;
+      padding-top: 60px;
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--nav);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.2rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    /* 🎐 Chime */
+    .chime {
+      position: fixed;
+      top: 90px;
+      right: 30px;
+      font-size: 2rem;
+      z-index: 50;
+      animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 10px var(--chime-glow); opacity: 0.8; }
+      50% { text-shadow: 0 0 20px var(--chime-glow); opacity: 1; }
+    }
+
+    /* 🌸 Petals */
+    .petals {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      opacity: 0.6;
+      border-radius: 50%;
+      animation: fall 10s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ✍️ Writing Area */
+    #fiction-write {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 300px;
+      padding: 1rem;
+      font-size: 1rem;
+      border: 2px solid #ffcce0;
+      border-radius: 10px;
+      background: var(--card);
+      color: var(--text);
+      resize: vertical;
+    }
+
+    .save-status {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🎐 Chime -->
+  <div class="chime">🎐</div>
+
+  <!-- 🌸 Petals -->
+  <div class="petals" id="petals"></div>
+
+  <!-- 🔗 Navbar -->
+  <nav>
+    <div class="logo">Euphoria Diaries</div>
+    <ul class="nav-links">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="fiction.html">📖 Fiction</a></li>
+      <li><a href="mythology.html">🌌 Mythology</a></li>
+      <li><a href="#" id="theme-toggle">🌙</a></li>
+    </ul>
+  </nav>
+
+  <!-- ✍️ Writing Section -->
+  <section id="fiction-write">
+    <h2>📖 Your Fiction Diary</h2>
+    <textarea id="fictionNotes" placeholder="Start writing your story here..."></textarea>
+    <p class="save-status">Saved automatically ✅</p>
+  </section>
+
+  <!-- ✅ JavaScript -->
+  <script>
+    // Theme toggle
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+      const html = document.documentElement;
+      const isDark = html.dataset.theme === "dark";
+      html.dataset.theme = isDark ? "light" : "dark";
+      toggle.textContent = isDark ? "🌙" : "☀️";
+    });
+
+    // Petal animation
+    const petalsContainer = document.getElementById("petals");
+    for (let i = 0; i < 25; i++) {
+      const petal = document.createElement("div");
+      petal.classList.add("petal");
+      petal.style.left = `${Math.random() * 100}%`;
+      petal.style.animationDuration = `${6 + Math.random() * 5}s`;
+      petal.style.opacity = Math.random();
+      petalsContainer.appendChild(petal);
+    }
+
+    // Auto-save notes
+    const textarea = document.getElementById('fictionNotes');
+    const status = document.querySelector('.save-status');
+
+    textarea.value = localStorage.getItem('fictionNotes') || '';
+    textarea.addEventListener('input', () => {
+      localStorage.setItem('fictionNotes', textarea.value);
+      status.textContent = "Saved automatically ✅";
+    });
+  </script>
+</body>
+</html>
