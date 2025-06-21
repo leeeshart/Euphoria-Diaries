@@ -182,38 +182,30 @@
       .chime { font-size: 1.6rem; right: 20px; }
       .cat { width: 60px; }
     }
-      .sakura-tree {
+    
+.sakura-canvas {
   position: fixed;
-  bottom: 20px;
-  left: 40px;
-  width: 1px;
-  height: 1px;
-  z-index: 20;
-  transform: scale(10);
-  image-rendering: pixelated;
-  box-shadow:
-    /* trunk */
-    4px 6px #8b5a2b, 4px 7px #8b5a2b, 4px 8px #8b5a2b, 4px 9px #8b5a2b,
-    4px 10px #8b5a2b, 4px 11px #8b5a2b, 4px 12px #8b5a2b,
-
-    /* left blossoms */
-    2px 4px #ffcce5, 1px 3px #ffd6e8, 0px 3px #ffc1e3,
-    2px 3px #ffb6c1, 1px 2px #ffcce0, 0px 2px #ffd6e8,
-
-    /* right blossoms */
-    6px 4px #ffcce5, 7px 3px #ffd6e8, 8px 3px #ffc1e3,
-    6px 3px #ffb6c1, 7px 2px #ffcce0, 8px 2px #ffd6e8,
-
-    /* top blossoms */
-    4px 2px #ffccdd, 3px 1px #ffcce0, 5px 1px #ffcce0,
-    4px 1px #ffd6e8, 4px 0px #ffb6c1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(60, 10px);
+  grid-template-rows: repeat(40, 10px);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.7;
 }
-
+.pixel {
+  width: 10px;
+  height: 10px;
+}
 
   </style>
 </head>
 <body>
-  <div class="sakura-tree"></div>
+  
+<div class="sakura-canvas" id="sakuraCanvas"></div>
 
 
 
@@ -314,5 +306,53 @@ for (let i = 0; i < 10; i++) {
       petalsContainer.appendChild(petal);
     }
   </script>
+          <script>
+  const canvas = document.getElementById("sakuraCanvas");
+
+  const treePixels = [
+    // Trunk
+    { x: 30, y: 30, color: "#8b5a2b" },
+    { x: 30, y: 31, color: "#8b5a2b" },
+    { x: 30, y: 32, color: "#8b5a2b" },
+    { x: 30, y: 33, color: "#8b5a2b" },
+    { x: 30, y: 34, color: "#8b5a2b" },
+    { x: 30, y: 35, color: "#8b5a2b" },
+    { x: 30, y: 36, color: "#8b5a2b" },
+
+    // Blossoms (shades of pink)
+    { x: 28, y: 28, color: "#ffcce0" },
+    { x: 29, y: 27, color: "#ffb6c1" },
+    { x: 30, y: 26, color: "#ffd6e8" },
+    { x: 31, y: 27, color: "#ffc1e3" },
+    { x: 32, y: 28, color: "#ffcce0" },
+    { x: 28, y: 26, color: "#ffb6c1" },
+    { x: 32, y: 26, color: "#ffd6e8" },
+    { x: 29, y: 25, color: "#ffcce0" },
+    { x: 30, y: 24, color: "#ffc1e3" },
+    { x: 31, y: 25, color: "#ffb6c1" },
+    { x: 33, y: 27, color: "#ffd6e8" },
+    { x: 27, y: 27, color: "#ffcce0" },
+    { x: 30, y: 23, color: "#ffd6e8" },
+    { x: 29, y: 23, color: "#ffcce0" },
+    { x: 31, y: 23, color: "#ffb6c1" },
+    { x: 28, y: 24, color: "#ffcce0" },
+    { x: 32, y: 24, color: "#ffcce0" }
+  ];
+
+  for (let y = 0; y < 40; y++) {
+    for (let x = 0; x < 60; x++) {
+      const pixel = document.createElement("span");
+      pixel.className = "pixel";
+      const match = treePixels.find(p => p.x === x && p.y === y);
+      if (match) {
+        pixel.style.background = match.color;
+      } else {
+        pixel.style.background = "transparent";
+      }
+      canvas.appendChild(pixel);
+    }
+  }
+</script>
+
 </body>
 </html>
