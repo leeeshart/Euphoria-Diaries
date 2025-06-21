@@ -182,9 +182,53 @@
       .chime { font-size: 1.6rem; right: 20px; }
       .cat { width: 60px; }
     }
+    .sakura-tree {
+  position: fixed;
+  bottom: 20px;
+  left: 40px;
+  width: 1px;
+  height: 1px;
+  z-index: 2;
+  transform: scale(4);
+  image-rendering: pixelated;
+  box-shadow:
+    /* trunk */
+    3px 5px #8b5a2b, 3px 6px #8b5a2b, 3px 7px #8b5a2b,
+    3px 8px #8b5a2b, 3px 9px #8b5a2b,
+
+    /* blossoms - left */
+    1px 2px #ffb6c1, 2px 1px #ffccdd, 2px 2px #ffcce5,
+    1px 3px #ffccdd, 0px 2px #ffcce0,
+
+    /* blossoms - right */
+    4px 1px #ffcce0, 5px 2px #ffb6c1, 4px 3px #ffcce5,
+    5px 3px #ffd6e8, 6px 2px #ffc1e3,
+
+    /* top blossoms */
+    3px 0px #ffd6e8, 2px 0px #ffccdd, 4px 0px #ffcce5;
+}
+.extra-petals::before {
+  content: "🌸 🌸 🌸";
+  position: fixed;
+  bottom: 100px;
+  left: 80px;
+  font-size: 1rem;
+  animation: floatPetals 3s ease-in-out infinite alternate;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+@keyframes floatPetals {
+  0%   { transform: translateY(0px); opacity: 0.8; }
+  100% { transform: translateY(10px) rotate(5deg); opacity: 0.4; }
+}
+
   </style>
 </head>
 <body>
+  <div class="sakura-tree"></div>
+<div class="extra-petals"></div>
+
 
   <!-- Loader -->
   <div id="loader"><p>Loading Euphoria...</p></div>
