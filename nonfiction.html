@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Non-Fiction – Euphoria Diaries</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #222;
+      --nav: #f0f0f0;
+      --card: #f9f9f9;
+      --sky: #ffffff;
+      --chime-glow: #f9c7ff;
+    }
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #ffffff;
+      --nav: #1e1e1e;
+      --card: #2c2c2c;
+      --sky: #0b1d41;
+      --chime-glow: #9be0ff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--sky);
+      color: var(--text);
+      transition: all 0.3s ease;
+      padding-top: 60px;
+      overflow-x: hidden;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--nav);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.2rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+    }
+    section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .chime {
+      position: fixed;
+      top: 90px;
+      right: 30px;
+      font-size: 2rem;
+      z-index: 50;
+      animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 10px var(--chime-glow); opacity: 0.8; }
+      50% { text-shadow: 0 0 20px var(--chime-glow); opacity: 1; }
+    }
+    .petals {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .petal {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      opacity: 0.6;
+      border-radius: 50%;
+      animation: fall 10s linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+    #fiction-write {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+    #noteTitle, #noteContent {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      border: 2px solid #ffcce0;
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+    }
+    #noteContent {
+      height: 200px;
+      resize: vertical;
+    }
+    #saveNote {
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background: #ffa8c2;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+    #saveNote:hover {
+      background: #ff85a6;
+    }
+    .note-card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .note-card h4 {
+      margin-bottom: 0.5rem;
+    }
+    .note-card button {
+      margin-right: 1rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      background: #c0e6ff;
+    }
+    .delete-btn {
+      background: #ffc2c2;
+    }
+    #savingStatus {
+  animation: fadeGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes fadeGlow {
+  from { opacity: 0.5; text-shadow: 0 0 5px #ffcce0; }
+  to   { opacity: 1; text-shadow: 0 0 12px #ffaad4; }
+}
+
+  </style>
+</head>
+<body>
+  <div class="chime">🎐</div>
+  <div class="petals" id="petals"></div>
+  <nav>
+    <div class="logo">Euphoria Diaries</div>
+    <ul class="nav-links">
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="#" id="theme-toggle">🌙</a></li>
+    </ul>
+  </nav>
+
+  <section id="fiction-write">
+    <h2>📖 Your Non-Fiction</h2>
+    <input type="text" id="noteTitle" placeholder="Note title (e.g., Chapter 1)" />
+    <textarea id="noteContent" placeholder="Write your fiction here..."></textarea>
+    <button id="saveNote">💾 Save Note</button>
+    <p id="savingStatus" style="display: none; font-size: 0.95rem; color: #888; margin-top: 0.5rem;">💾 Saving...</p>
+   <hr style="margin: 2rem 0;" />
+    <h3>Your Saved Notes</h3>
+    <div id="notesList"></div>
+  </section>
+
+  <script>
+    const toggle = document.getElementById("theme-toggle");
+    toggle.addEventListener("click", () => {
+      const html = document.documentElement;
+      const isDark = html.dataset.theme === "dark";
+      html.dataset.theme = isDark ? "light" : "dark";
+      toggle.textContent = isDark ? "🌙" : "☀️";
+    });
+
+    const petalsContainer = document.getElementById("petals");
+    for (let i = 0; i < 25; i++) {
+      const petal = document.createElement("div");
+      petal.classList.add("petal");
+      petal.style.left = `${Math.random() * 100}%`;
+      petal.style.animationDuration = `${6 + Math.random() * 5}s`;
+      petal.style.opacity = Math.random();
+      petalsContainer.appendChild(petal);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const saveBtn = document.getElementById("saveNote");
+      const titleInput = document.getElementById("noteTitle");
+      const contentInput = document.getElementById("noteContent");
+      const notesList = document.getElementById("notesList");
+      const savingStatus = document.getElementById("savingStatus");
+
+      function loadNotes() {
+        const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+        notesList.innerHTML = "";
+        notes.forEach((note, index) => {
+          const noteDiv = document.createElement("div");
+          noteDiv.classList.add("note-card");
+          noteDiv.innerHTML = `
+            <h4>${note.title}</h4>
+            <p>${note.content}</p>
+            <button class="edit-btn" onclick="editNote(${index})">✏️ Edit</button>
+            <button class="delete-btn" onclick="deleteNote(${index})">🗑 Delete</button>
+          `;
+          notesList.appendChild(noteDiv);
+        });
+      }
+
+    function saveNote() {
+  const title = titleInput.value.trim();
+  const content = contentInput.value.trim();
+  if (!title || !content) return alert("Title and content required!");
+  
+  savingStatus.style.display = "inline";
+  const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+  notes.push({ title, content });
+  localStorage.setItem("fictionNotes", JSON.stringify(notes));
+  
+  titleInput.value = "";
+  contentInput.value = "";
+  loadNotes();
+
+  setTimeout(() => {
+    savingStatus.style.display = "none";
+  }, 1200);
+}
+
+
+      window.editNote = function(index) {
+        const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+        const note = notes[index];
+        titleInput.value = note.title;
+        contentInput.value = note.content;
+        deleteNote(index);
+      };
+
+      window.deleteNote = function(index) {
+        const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+        notes.splice(index, 1);
+        localStorage.setItem("fictionNotes", JSON.stringify(notes));
+        loadNotes();
+      };
+
+      saveBtn.addEventListener("click", saveNote);
+      loadNotes();
+    });
+  </script>
+</body>
+</html>
