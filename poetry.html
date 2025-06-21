@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Non-Fiction – Euphoria Diaries</title>
+  <title>Poetry– Euphoria Diaries</title>
   <style>
     :root {
       --bg: #ffffff;
@@ -99,7 +99,7 @@
       0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
-    #fiction-write {
+    #poetry-write {
       max-width: 800px;
       margin: auto;
       padding: 2rem;
@@ -177,10 +177,10 @@
     </ul>
   </nav>
 
-  <section id="fiction-write">
-    <h2>📖 Your Non-Fiction</h2>
+  <section id="poetry-write">
+    <h2>📖 Your Poem</h2>
     <input type="text" id="noteTitle" placeholder="Note title (e.g., Chapter 1)" />
-    <textarea id="noteContent" placeholder="Write your fiction here..."></textarea>
+    <textarea id="noteContent" placeholder="Write your poem here..."></textarea>
     <button id="saveNote">💾 Save Note</button>
     <p id="savingStatus" style="display: none; font-size: 0.95rem; color: #888; margin-top: 0.5rem;">💾 Saving...</p>
    <hr style="margin: 2rem 0;" />
@@ -215,7 +215,7 @@
       const savingStatus = document.getElementById("savingStatus");
 
       function loadNotes() {
-        const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+        const notes = JSON.parse(localStorage.getItem("poetryNotes")) || [];
         notesList.innerHTML = "";
         notes.forEach((note, index) => {
           const noteDiv = document.createElement("div");
@@ -236,9 +236,9 @@
   if (!title || !content) return alert("Title and content required!");
   
   savingStatus.style.display = "inline";
-  const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+  const notes = JSON.parse(localStorage.getItem("poetryNotes")) || [];
   notes.push({ title, content });
-  localStorage.setItem("fictionNotes", JSON.stringify(notes));
+  localStorage.setItem("poetryNotes", JSON.stringify(notes));
   
   titleInput.value = "";
   contentInput.value = "";
@@ -251,7 +251,7 @@
 
 
       window.editNote = function(index) {
-        const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+        const notes = JSON.parse(localStorage.getItem("poetryNotes")) || [];
         const note = notes[index];
         titleInput.value = note.title;
         contentInput.value = note.content;
@@ -259,7 +259,7 @@
       };
 
       window.deleteNote = function(index) {
-        const notes = JSON.parse(localStorage.getItem("fictionNotes")) || [];
+        const notes = JSON.parse(localStorage.getItem("poetryNotes")) || [];
         notes.splice(index, 1);
         localStorage.setItem("fictionNotes", JSON.stringify(notes));
         loadNotes();
